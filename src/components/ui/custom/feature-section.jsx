@@ -1,20 +1,22 @@
 import React from 'react';
 
-const Header = () => {
+const FeatureSection = () => {
   return (
     <div>
       {' '}
       <section class="py-12 relative">
         <div class="w-full  max-w-7xl  mx-auto px-4 md:px-8">
           <div class="grid grid-cols-12 gap-y-11">
-            <div class="col-span-12 lg:col-span-7 py-12 px-4 lg:px-11 bg-gray-50 max-lg:rounded-2xl lg:rounded-l-2xl flex flex-col justify-between max-lg:max-w-lg max-lg:mx-auto">
+            <div class="col-span-12 lg:col-span-7 lg:order-1 py-12 px-4 lg:px-11 bg-gray-50 max-lg:rounded-2xl lg:rounded-l-2xl flex flex-col justify-between max-lg:max-w-lg max-lg:mx-auto">
               <h2 class="font-manrope font-bold text-2xl sm:text-4xl leading-10 text-black mb-9">
-                Lets <span className="text-fuchsia-600"> GiftHub </span> Find
-                the Best Gift <span className="text-fuchsia-600"> Ideas</span>
+                <span className="text-fuchsia-600"> For Everyone </span> At Any
+                Time - The Best Gift Ideas Are Just{' '}
+                <span className="text-fuchsia-600"> A Click Away</span>
               </h2>
-              <p class="font-manrope text-base leading-10 text-black mb-9">
-                Find gifts that truly matter for every occasion with our Gift
-                Finder
+              <p class="font-manrope text-base leading-8 text-black mb-9">
+                It can be hard to come up with original ideas to surprise your
+                loved ones. Thats where we come in. GiftHub helps you find the
+                best gift ideas and is completely free to use.
               </p>
               <div class="flex flex-col min-[550px]:flex-row max-[550px]:gap-4 min-[550px]:items-center py-4 pr-3 lg:pr-10 pl-3 lg:pl-6 bg-white mb-14 w-full xl:w-[calc(100%-45px)]">
                 <div class="flex items-center gap-4 pr-6 max-[550px]:pl-6 min-[550px]:border-r border-gray-200 ">
@@ -125,4 +127,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default FeatureSection;
