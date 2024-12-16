@@ -1,16 +1,44 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import FeatureSection from '@/components/ui/custom/feature-section';
 import Header from '@/components/ui/custom/header';
 import Component from '@/components/ui/custom/navbar';
 import Navbar from '@/components/ui/custom/navbar';
+import Stepper from '@/components/ui/custom/stepper';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import Image from 'next/image';
+import { useState } from 'react';
 
 export default function Home() {
+  const [openModal, setopenModal] = useState(false);
+
   return (
     <>
-      <Component />
       <Header />
       <FeatureSection />
+      <Dialog
+        // open={openModal}
+        // onOpenChange={setopenModal}
+        className="w-full"
+      >
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogDescription>
+              <Stepper />
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
       <section class="bg-white dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
           <div class="max-w-screen-md mb-8 lg:mb-16">
