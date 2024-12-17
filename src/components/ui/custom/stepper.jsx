@@ -11,11 +11,14 @@ import CustomCard from './custom-card';
 import { Input } from '../input';
 import { Button } from '../button';
 import { Label } from '../label';
+import axios from 'axios';
+import Link from 'next/link';
 
 const Stepper = () => {
   const [selectedEvent, setSelectedEvent] = useState('');
   const [selectedPerson, setSelectedPerson] = useState('');
   const [activeStep, setActiveStep] = useState(1);
+  const [data, setdata] = useState([]);
   const [formData, setFormData] = useState({
     age: '',
     interests: '',
@@ -134,10 +137,19 @@ const Stepper = () => {
     // }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setActiveStep(activeStep + 1);
     setFormData({ ...formData, event: selectedEvent, person: selectedPerson });
-    console.log('Form Data', formData);
+    try {
+      const response = await axios.get(
+        `/api/search?occasion=${selectedEvent}&category=${formData.category}&tags=${formData.interests}&age=${formData.age}`
+      );
+      const data = response.data.results;
+      setdata(data);
+      console.log(response.data.results);
+    } catch (error) {
+      console.error('Ërror in  fecting gitfs', error);
+    }
   };
   const handleEventClick = (data) => {
     setSelectedEvent(data);
@@ -146,8 +158,12 @@ const Stepper = () => {
     setSelectedPerson(data);
   };
 
+  const handleGoToStart = () => {
+    setActiveStep(1);
+  };
+
   return (
-    <div className="w-full mx-auto">
+    <div className="w-full mx-auto h-screen">
       {/* Stepper Navigation */}
       <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base mb-8">
         {steps.map((step, index) => (
@@ -180,7 +196,7 @@ const Stepper = () => {
       </ol>
 
       {/* Step Content */}
-      <div className="mb-6 h-[50vh]">
+      <div className="mb-6">
         {activeStep === 1 && (
           <div className="flex gap-4">
             <CustomCard data={EventData} onCardClick={handleEventClick} />;
@@ -262,21 +278,72 @@ const Stepper = () => {
         )}
 
         {activeStep === 4 && (
-          <div className="flex gap-4  flex-col w-[40%] justify-center items-center mx-auto ">
-            All Findings
+          <div className="flex gap-4  flex-col justify-center items-center  ">
+            <div className="text-center">
+              <h1 className="text-2xl font-semibold text-fuchsia-600">
+                Your Personalized Gift Recommendations
+              </h1>
+              <p className="text-gray-600">
+                Here are some suggestions for your gift based on your
+                preferences. Click on a card to view more details.
+              </p>
+            </div>
+            <div className="overflow-y-auto max-h-[80vh]">
+              {' '}
+              {/* This makes the container scrollable */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {data?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                  >
+                    <div className="bg-white p-4 rounded-lg border border-gray-200">
+                      <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                        {item.gift_name}{' '}
+                        <span className="text-fuchsia-500">
+                          ({item.occasion})
+                        </span>
+                      </h2>
+                      <p className="text-gray-600 mb-4">
+                        {item.gift_description}
+                      </p>
+                      <div className="flex justify-between items-center">
+                        <Link
+                          href={`https://www.google.com/search?q=${encodeURIComponent(
+                            item.gift_name
+                          )}`}
+                          target="_blank"
+                          className="text-blue-600 hover:text-blue-800 font-semibold"
+                        >
+                          View Details
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <Button
+              className="px-4 py-2 w-full  text-white bg-green-500  hover:bg-fuchsia-500 rounded-lg"
+              onClick={handleGoToStart}
+            >
+              Find More...
+            </Button>
           </div>
         )}
       </div>
       <div className="flex justify-between">
-        <button
-          className={`px-4 py-2 text-white bg-gray-400 rounded-lg ${
-            activeStep === 1 ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          onClick={handleBack}
-          disabled={activeStep === 1}
-        >
-          Back
-        </button>
+        {activeStep > 1 && (
+          <button
+            className={`px-4 py-2 text-white bg-gray-400 rounded-lg ${
+              activeStep === 1 ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            onClick={handleBack}
+            disabled={activeStep === 1}
+          >
+            Back
+          </button>
+        )}
         {activeStep < 3 ? (
           <button
             className="px-4 py-2 text-white bg-fuchsia-500 rounded-lg"

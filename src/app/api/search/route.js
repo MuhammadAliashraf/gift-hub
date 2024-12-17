@@ -162,15 +162,18 @@ export async function GET(req) {
     const occasion = searchParams.get('occasion') || '';
     const category = searchParams.get('category') || '';
     const tags = searchParams.get('tags')?.split(',') || [];
-
+    const age = searchParams.get('age') || '';
     // Convert tags to array
+    //db feild:recipient_age_group
 
     // Aggregation pipeline
     const results = await ProductModel.aggregate([
       {
         // Step 1: Match documents by occasion
         $match: {
-          occasion: occasion,
+          occasion: { $regex: occasion, $options: 'i' },
+          recipient_age_group: { $regex: age, $options: 'i' },
+          category: { $regex: category, $options: 'i' },
         },
       },
       {
@@ -178,12 +181,12 @@ export async function GET(req) {
         $addFields: {
           matchScore: {
             $add: [
-              { $cond: [{ $eq: ['$category', category] }, 2, 0] }, // +2 points for category match
-              // {
-              //   $size: {
-              //     $setIntersection: [tags, '$tags'], // +1 point for each matching tag
-              //   },
-              // },
+              { $cond: [{ $eq: ['$category', category] }, 2, 0] },
+              {
+                $size: {
+                  $setIntersection: [tags, '$tags'],
+                },
+              },
             ],
           },
         },
@@ -196,9 +199,10 @@ export async function GET(req) {
 
     // Check if no results found
     if (results.length === 0) {
+      const results = await ProductModel.find({});
       return Response.json(
-        { message: 'No matching results found' },
-        { status: StatusCodes.NOT_FOUND }
+        { message: 'No results found', results },
+        { status: StatusCodes.OK }
       );
     }
 

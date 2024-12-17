@@ -4,7 +4,7 @@ import React from 'react';
 
 const Page = () => {
   return (
-    <div className="w-full  max-w-7xl  mx-auto px-4 md:px-8 h-screen">
+    <div className="w-full  max-w-7xl  mx-auto px-4 md:px-8">
       <div className=" mt-8 mb-10">
         <h1 className=" text-center text-3xl font-bold mb-4">
           Gift Finder - The Best Gift Ideas in 2024
