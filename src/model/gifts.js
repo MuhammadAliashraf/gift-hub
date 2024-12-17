@@ -1,16 +1,20 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const giftSchema = new mongoose.Schema({
-  gift_name: { type: String, required: true },
-  price: { type: Number, required: true },
-  category: { type: String, required: true },
+const ProductSchema = new mongoose.Schema({
+  gift_name: { type: String },
+  price: { type: Number },
+  category: { type: String },
   tags: [String], // Array of tags
-  recipient_age_group: { type: String, required: true },
-  occasion: { type: String, required: true },
-  purchase_link: { type: String, required: true },
-  gift_description: { type: String, required: true },
-  recipient_name: { type: String, required: true },
-  shipping_address: { type: String, required: true },
+  recipient_age_group: { type: String },
+  occasion: { type: String },
+  purchase_link: { type: String },
+  gift_description: { type: String },
+  recipient_name: { type: String },
+  shipping_address: { type: String },
 });
 
-module.exports = mongoose.model('Gift', giftSchema);
+// Check if the model already exists to prevent OverwriteModelError
+const ProductModel =
+  mongoose.models.Product || mongoose.model('Product', ProductSchema);
+
+export default ProductModel;

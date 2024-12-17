@@ -1,12 +1,13 @@
-import gifts from '@/model/gifts';
+import dbConnect from '@/lib/db-connect';
+import Product from '@/model/gifts';
 import { StatusCodes } from 'http-status-codes';
-
-export async function POST() {
-  const { occasion, category, tags } = req.query;
+export async function POST(req, res) {
+  await dbConnect();
+  const { occasion, category, tags } = req.body;
 
   try {
     // MongoDB aggregation pipeline
-    const bestMatch = await gifts.aggregate([
+    const bestMatch = await Product.aggregate([
       {
         // Match documents based on the occasion
         $match: {
@@ -52,19 +53,36 @@ export async function POST() {
     ]);
 
     if (bestMatch.length === 0) {
-      return res.status(404).json({ message: 'No matching gift found' });
+      return Response.json(
+        {
+          message: 'No matching gift found',
+        },
+        { status: StatusCodes.NOT_FOUND }
+      );
     }
 
     // Return the best match
     res.json(bestMatch);
+    return Response.json(
+      {
+        message: 'fetch',
+        bestMatch,
+      },
+      { status: StatusCodes.OK }
+    );
   } catch (error) {
     console.error('Error fetching best match:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    return Response.json(
+      {
+        message: 'There is an internal server error',
+      },
+      { status: StatusCodes.INTERNAL_SERVER_ERROR }
+    );
   }
-  //   return Response.json(
-  //     {
-  //       message: 'Welcome to the app',
-  //     },
-  //     { status: StatusCodes.OK }
-  //   );
+  // return Response.json(
+  //   {
+  //     message: 'Welcome to the app',
+  //   },
+  //   { status: StatusCodes.OK }
+  // );
 }
