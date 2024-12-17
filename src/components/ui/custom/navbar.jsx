@@ -10,41 +10,20 @@ export default function Component() {
         <MountainIcon className="h-6 w-6 text-fuchsia-600 " />
         <span className="text-lg font-semibold">Gift Hub</span>
       </Link>
-      <div className="hidden md:flex gap-4">
+      <div className="hidden md:flex gap-2 ">
         <Link
-          href="#"
+          href="/"
           className="flex w-full items-center py-2 text-base"
           prefetch={false}
         >
           Home
         </Link>
         <Link
-          href="#"
-          className="flex w-full items-center py-2 text-base "
+          href="/finding-gift"
+          className="flex   w-[300px]  py-2 text-base "
           prefetch={false}
         >
-          About
-        </Link>
-        <Link
-          href="#"
-          className="flex w-full items-center py-2 text-base "
-          prefetch={false}
-        >
-          Services
-        </Link>
-        <Link
-          href="#"
-          className="flex w-full items-center py-2 text-base "
-          prefetch={false}
-        >
-          Portfolio
-        </Link>
-        <Link
-          href="#"
-          className="flex w-full items-center py-2 text-base "
-          prefetch={false}
-        >
-          Contact
+          Find Gift
         </Link>
       </div>
       <Sheet>
@@ -57,39 +36,18 @@ export default function Component() {
         <SheetContent side="left">
           <div className="grid w-[200px] p-4">
             <Link
-              href="#"
+              href="/"
               className="flex w-full items-center py-2 text-base"
               prefetch={false}
             >
               Home
             </Link>
             <Link
-              href="#"
+              href="/finding-gift"
               className="flex w-full items-center py-2 text-base"
               prefetch={false}
             >
-              About
-            </Link>
-            <Link
-              href="#"
-              className="flex w-full items-center py-2 text-base"
-              prefetch={false}
-            >
-              Services
-            </Link>
-            <Link
-              href="#"
-              className="flex w-full items-center py-2 text-base"
-              prefetch={false}
-            >
-              Portfolio
-            </Link>
-            <Link
-              href="#"
-              className="flex w-full items-center py-2 text-base"
-              prefetch={false}
-            >
-              Contact
+              Find Gift
             </Link>
           </div>
         </SheetContent>
