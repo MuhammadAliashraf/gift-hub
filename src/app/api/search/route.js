@@ -1,17 +1,106 @@
+// import dbConnect from '@/lib/db-connect';
+// import ProductModel from '@/model/gifts';
+// import { StatusCodes } from 'http-status-codes';
+// export async function GET(req, res) {
+//   await dbConnect();
+//   const { occasion, category, tags } = req.json();
+//   return Response.json(
+//     {
+//       message: 'Welcome to the app',
+//       occasion,
+//       category,
+//       tags,
+//     },
+
+//     { status: StatusCodes.OK }
+//   );
+//   return;
+//   try {
+//     // MongoDB aggregation pipeline
+//     const bestMatch = await ProductModel.aggregate([
+//       {
+//         // Match documents based on the occasion
+//         $match: {
+//           occasion: occasion || '', // Default to an empty string if not provided
+//         },
+//       },
+//       {
+//         // Add a score field to rank matches based on category and tags
+//         $addFields: {
+//           matchScore: {
+//             $add: [
+//               { $cond: [{ $eq: ['$category', category] }, 2, 0] }, // Adjust weight as needed
+//               { $cond: [{ $in: [tags, '$tags'] }, 1, 0] }, // Match tags using `$in`
+//             ],
+//           },
+//         },
+//       },
+//       {
+//         // Sort documents by matchScore in descending order
+//         $sort: { matchScore: -1 },
+//       },
+//     ]);
+
+//     if (bestMatch.length === 0) {
+//       return Response.json(
+//         {
+//           message: 'No matching gift found',
+//         },
+//         { status: StatusCodes.NOT_FOUND }
+//       );
+//     }
+
+//     // Return the best match
+//     return Response.json(
+//       {
+//         message: 'fetch',
+//         bestMatch,
+//       },
+//       { status: StatusCodes.OK }
+//     );
+//   } catch (error) {
+//     console.error('Error fetching best match:', error);
+//     return Response.json(
+//       {
+//         message: 'There is an internal server error',
+//       },
+//       { status: StatusCodes.INTERNAL_SERVER_ERROR }
+//     );
+//   }
+//   // return Response.json(
+//   //   {
+//   //     message: 'Welcome to the app',
+//   //   },
+//   //   { status: StatusCodes.OK }
+//   // );
+// }
 import dbConnect from '@/lib/db-connect';
-import Product from '@/model/gifts';
+import ProductModel from '@/model/gifts';
 import { StatusCodes } from 'http-status-codes';
-export async function POST(req, res) {
+
+// GET Query From Client Side :http://localhost:3000/api/search?occasion=Birthday&category=Electronic&tags=Technology
+// TODO: query is not working right now
+
+export async function GET(req) {
   await dbConnect();
-  const { occasion, category, tags } = req.body;
 
   try {
+    // Extract query parameters from the URL
+    const { searchParams } = req.nextUrl;
+    console.log(searchParams);
+    const occasion = searchParams.get('occasion') || '';
+    const category = searchParams.get('category') || '';
+    const tags = searchParams.get('tags') || '';
+    // ? searchParams.get('tags')
+    // .split(',')
+    // : [];
+
     // MongoDB aggregation pipeline
-    const bestMatch = await Product.aggregate([
+    const bestMatch = await ProductModel.aggregate([
       {
         // Match documents based on the occasion
         $match: {
-          occasion: occasion || '', // Default to an empty string if not provided
+          occasion: occasion, // Default to an empty string if not provided
         },
       },
       {
@@ -20,7 +109,9 @@ export async function POST(req, res) {
           matchScore: {
             $add: [
               { $cond: [{ $eq: ['$category', category] }, 2, 0] }, // Adjust weight as needed
-              { $cond: [{ $in: [tags, '$tags'] }, 1, 0] }, // Match tags using `$in`
+              {
+                $cond: [{ $anyElementTrue: [{ $in: ['$tags', tags] }] }, 1, 0],
+              }, // Match tags using `$in`
             ],
           },
         },
@@ -29,29 +120,9 @@ export async function POST(req, res) {
         // Sort documents by matchScore in descending order
         $sort: { matchScore: -1 },
       },
-      {
-        // Limit to the best match
-        $limit: 1,
-      },
-      {
-        // Project only the required fields
-        $project: {
-          _id: 1,
-          gift_name: 1,
-          price: 1,
-          category: 1,
-          tags: 1,
-          recipient_age_group: 1,
-          occasion: 1,
-          purchase_link: 1,
-          gift_description: 1,
-          recipient_name: 1,
-          shipping_address: 1,
-          matchScore: 1, // Optional: Remove this if not needed in the output
-        },
-      },
     ]);
 
+    // Check if no matches are found
     if (bestMatch.length === 0) {
       return Response.json(
         {
@@ -62,7 +133,6 @@ export async function POST(req, res) {
     }
 
     // Return the best match
-    res.json(bestMatch);
     return Response.json(
       {
         message: 'fetch',
@@ -75,14 +145,9 @@ export async function POST(req, res) {
     return Response.json(
       {
         message: 'There is an internal server error',
+        error: error.message,
       },
       { status: StatusCodes.INTERNAL_SERVER_ERROR }
     );
   }
-  // return Response.json(
-  //   {
-  //     message: 'Welcome to the app',
-  //   },
-  //   { status: StatusCodes.OK }
-  // );
 }
