@@ -1,9 +1,9 @@
+import Link from 'next/link';
 import React from 'react';
 
 const FeatureSection = () => {
   return (
     <div>
-      {' '}
       <section class="py-12 relative">
         <div class="w-full  max-w-7xl  mx-auto px-4 md:px-8">
           <div class="grid grid-cols-12 gap-y-11">
@@ -108,9 +108,12 @@ const FeatureSection = () => {
                     </clipPath>
                   </defs>
                 </svg>
-                <span class="px-2 font-semibold text-base text-white">
+                <Link
+                  href="/finding-gift"
+                  class="px-2 font-semibold text-base text-white"
+                >
                   Find a gift now
-                </span>
+                </Link>
               </a>
             </div>
             <div class="col-span-12 lg:col-span-5 lg:max-w-md max-lg:mx-auto ">

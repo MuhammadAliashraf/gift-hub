@@ -18,6 +18,7 @@ const Stepper = () => {
   const [selectedEvent, setSelectedEvent] = useState('');
   const [selectedPerson, setSelectedPerson] = useState('');
   const [activeStep, setActiveStep] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [data, setdata] = useState([]);
   const [formData, setFormData] = useState({
     age: '',
@@ -138,6 +139,7 @@ const Stepper = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     setActiveStep(activeStep + 1);
     setFormData({ ...formData, event: selectedEvent, person: selectedPerson });
     try {
@@ -146,9 +148,10 @@ const Stepper = () => {
       );
       const data = response.data.results;
       setdata(data);
-      console.log(response.data.results);
     } catch (error) {
       console.error('Ërror in  fecting gitfs', error);
+    } finally {
+      setLoading(false);
     }
   };
   const handleEventClick = (data) => {
@@ -291,37 +294,43 @@ const Stepper = () => {
             <div className="overflow-y-auto max-h-[80vh]">
               {' '}
               {/* This makes the container scrollable */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {data?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
-                  >
-                    <div className="bg-white p-4 rounded-lg border border-gray-200">
-                      <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                        {item.gift_name}{' '}
-                        <span className="text-fuchsia-500">
-                          ({item.occasion})
-                        </span>
-                      </h2>
-                      <p className="text-gray-600 mb-4">
-                        {item.gift_description}
-                      </p>
-                      <div className="flex justify-between items-center">
-                        <Link
-                          href={`https://www.google.com/search?q=${encodeURIComponent(
-                            item.gift_name
-                          )}`}
-                          target="_blank"
-                          className="text-blue-600 hover:text-blue-800 font-semibold"
-                        >
-                          View Details
-                        </Link>
+              {loading ? (
+                <div className=" flex items-center justify-center  h-[200px] w-[200px]  mx-auto">
+                  <span class="loader"></span>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {data?.map((item, index) => (
+                    <div
+                      key={index}
+                      className="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                    >
+                      <div className="bg-white p-4 rounded-lg border border-gray-200">
+                        <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                          {item.gift_name}{' '}
+                          <span className="text-fuchsia-500">
+                            ({item.occasion})
+                          </span>
+                        </h2>
+                        <p className="text-gray-600 mb-4">
+                          {item.gift_description}
+                        </p>
+                        <div className="flex justify-between items-center">
+                          <Link
+                            href={`https://www.google.com/search?q=${encodeURIComponent(
+                              item.gift_name
+                            )}`}
+                            target="_blank"
+                            className="text-blue-600 hover:text-blue-800 font-semibold"
+                          >
+                            View Details
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
             <Button
               className="px-4 py-2 w-full  text-white bg-green-500  hover:bg-fuchsia-500 rounded-lg"

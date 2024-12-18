@@ -35,7 +35,7 @@ const Header = () => {
                       />
                     </svg>
                   </button>
-                  <p class="font-medium text-sm text-black">100% Free</p>
+                  <p class="font-medium text-sm text-black">No SignIn</p>
                 </div>
                 <div class="flex items-center gap-4 px-6 min-[550px]:border-r border-gray-200 ">
                   <button class="p-3 rounded-full bg-indigo-50 transition-all duration-500 hover:bg-indigo-100">
@@ -54,7 +54,7 @@ const Header = () => {
                       />
                     </svg>
                   </button>
-                  <p class="font-medium text-sm text-black">AI-Powered</p>
+                  <p class="font-medium text-sm text-black">No Cart</p>
                 </div>
                 <div class="flex items-center gap-4 pl-6  ">
                   <button class="p-3 rounded-full bg-indigo-50 transition-all duration-500 hover:bg-indigo-100">
@@ -73,9 +73,7 @@ const Header = () => {
                       />
                     </svg>
                   </button>
-                  <p class="font-medium text-sm text-black">
-                    Personalized Choice
-                  </p>
+                  <p class="font-medium text-sm text-black">No Wishlist</p>
                 </div>
               </div>
 

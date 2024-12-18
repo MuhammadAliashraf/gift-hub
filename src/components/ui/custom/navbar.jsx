@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 export default function Component() {
   return (
     <div className="w-full  max-w-7xl  mx-auto md:px-8 flex items-center justify-between py-4 bg-white dark:bg-gray-800">
-      <Link href="#" className="flex items-center gap-2" prefetch={false}>
+      <Link href="/" className="flex items-center gap-2" prefetch={false}>
         <MountainIcon className="h-6 w-6 text-fuchsia-600 " />
         <span className="text-lg font-semibold">Gift Hub</span>
       </Link>
