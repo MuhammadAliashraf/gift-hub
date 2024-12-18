@@ -65,7 +65,7 @@ Before you begin, ensure that you have the following installed:
 3. Create a `.env` file in the root of your project to store your MongoDB connection string:
 
    ```
-   MONGO_URI=your-mongodb-uri
+   NEXT_DB_URL=your-mongodb-uri
    ```
 
 4. Start the backend server:
